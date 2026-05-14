@@ -1,17 +1,20 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020", "DOM"],
-    "strict": true,
-    "esModuleInterop": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "allowJs": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "declaration": true
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }]
   },
-  "include": ["src/**/*", "scripts/**/*", "hardhat.config.ts"],
-  "exclude": ["node_modules", "dist", ".next", "artifacts", "cache"]
+  "include": ["src/**/*", "next.config.ts"],
+  "exclude": ["node_modules", ".next", "artifacts", "cache", "dist"]
 }
