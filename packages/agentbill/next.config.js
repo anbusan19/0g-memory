@@ -1,9 +1,8 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@0gfoundation/0g-storage-ts-sdk', 'ethers'],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
