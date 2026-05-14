@@ -1,0 +1,11 @@
+{
+  "name": "chainmemory-agentbill",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "cd packages/agentbill && pnpm dev",
+    "deploy:testnet": "cd packages/agentbill && pnpm hardhat run scripts/deploy.ts --network 0g-testnet",
+    "deploy:mainnet": "cd packages/agentbill && pnpm hardhat run scripts/deploy.ts --network 0g-mainnet",
+    "build": "pnpm --filter chainmemory-sdk build && pnpm --filter agentbill build"
+  }
+}
