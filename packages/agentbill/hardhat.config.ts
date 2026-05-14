@@ -1,4 +1,3 @@
-// @ts-ignore — ts-node uses tsconfig.hardhat.json for this file
 import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 import * as dotenv from 'dotenv';

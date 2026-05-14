@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "next build",
     "compile": "hardhat compile",
     "deploy:testnet": "hardhat run scripts/deploy.ts --network 0g-testnet",
     "deploy:mainnet": "hardhat run scripts/deploy.ts --network 0g-mainnet",
     "dev": "next dev",
     "start": "next start"
+  },
+  "ts-node": {
+    "project": "tsconfig.hardhat.json"
   },
   "dependencies": {
     "chainmemory-sdk": "workspace:*",
