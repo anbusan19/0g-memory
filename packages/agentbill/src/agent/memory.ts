@@ -1,4 +1,4 @@
-import { ChainMemory } from 'chainmemory-sdk';
+import { ChainMemory } from '0g-memory-sdk';
 
 let memoryInstance: ChainMemory | null = null;
 

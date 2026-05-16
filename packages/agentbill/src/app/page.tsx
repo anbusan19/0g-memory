@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ThemeToggle } from './components/ThemeToggle';
+import { DottedGlobe } from './components/DottedGlobe';
 
 type TabKey = 'remember' | 'recall' | 'archive';
 
@@ -25,179 +27,6 @@ export default function Home() {
       <AgentBill />
       <Footer />
     </div>
-  );
-}
-
-/* ─── Neural Network Sprite ──────────────────────────────────────────────── */
-function NeuralSprite() {
-  type Layer = { x: number; ys: number[] };
-  const layers: Layer[] = [
-    { x: 52,  ys: [78, 152, 226, 300] },
-    { x: 185, ys: [48, 108, 168, 228, 288, 348] },
-    { x: 335, ys: [48, 108, 168, 228, 288, 348] },
-    { x: 468, ys: [118, 198, 278] },
-  ];
-
-  const edges: { x1:number; y1:number; x2:number; y2:number; k:string }[] = [];
-  for (let li = 0; li < layers.length - 1; li++) {
-    for (const y1 of layers[li].ys) {
-      for (const y2 of layers[li + 1].ys) {
-        edges.push({ x1: layers[li].x, y1, x2: layers[li + 1].x, y2, k: `${li}-${y1}-${y2}` });
-      }
-    }
-  }
-
-  // Dense L1→L2 edges that get a slow "activity" flicker
-  const activityEdges = [
-    { li:1,ni:1, lj:2,nj:1 }, { li:1,ni:2, lj:2,nj:3 }, { li:1,ni:3, lj:2,nj:2 },
-    { li:1,ni:4, lj:2,nj:4 }, { li:1,ni:0, lj:2,nj:5 }, { li:1,ni:5, lj:2,nj:0 },
-  ].map((p, i) => ({
-    x1: layers[p.li].x, y1: layers[p.li].ys[p.ni],
-    x2: layers[p.lj].x, y2: layers[p.lj].ys[p.nj],
-    dur: 2.8 + i * 0.6, begin: i * 0.55,
-  }));
-
-  type PulseSpec = { li:number; ni:number; lj:number; nj:number; dur:number; begin:number };
-  const pulseSpecs: PulseSpec[] = [
-    // L0→L1 — 10 pulses
-    { li:0,ni:0, lj:1,nj:0, dur:1.0, begin:0.0 },
-    { li:0,ni:0, lj:1,nj:3, dur:1.2, begin:1.6 },
-    { li:0,ni:1, lj:1,nj:2, dur:0.9, begin:0.5 },
-    { li:0,ni:1, lj:1,nj:5, dur:1.1, begin:2.2 },
-    { li:0,ni:2, lj:1,nj:1, dur:1.0, begin:0.9 },
-    { li:0,ni:2, lj:1,nj:4, dur:1.3, begin:1.9 },
-    { li:0,ni:3, lj:1,nj:0, dur:1.1, begin:0.3 },
-    { li:0,ni:3, lj:1,nj:5, dur:1.2, begin:2.7 },
-    { li:0,ni:0, lj:1,nj:5, dur:1.4, begin:0.7 },
-    { li:0,ni:2, lj:1,nj:3, dur:0.9, begin:3.4 },
-    // L1→L2 — 12 pulses
-    { li:1,ni:0, lj:2,nj:2, dur:1.5, begin:0.2 },
-    { li:1,ni:0, lj:2,nj:5, dur:1.7, begin:2.9 },
-    { li:1,ni:1, lj:2,nj:1, dur:1.3, begin:0.8 },
-    { li:1,ni:2, lj:2,nj:4, dur:1.4, begin:1.5 },
-    { li:1,ni:2, lj:2,nj:0, dur:1.6, begin:3.7 },
-    { li:1,ni:3, lj:2,nj:3, dur:1.5, begin:0.4 },
-    { li:1,ni:3, lj:2,nj:1, dur:1.3, begin:2.1 },
-    { li:1,ni:4, lj:2,nj:4, dur:1.4, begin:1.0 },
-    { li:1,ni:4, lj:2,nj:2, dur:1.7, begin:3.2 },
-    { li:1,ni:5, lj:2,nj:5, dur:1.5, begin:0.0 },
-    { li:1,ni:5, lj:2,nj:0, dur:1.6, begin:2.4 },
-    { li:1,ni:1, lj:2,nj:3, dur:1.4, begin:4.1 },
-    // L2→L3 — 8 pulses
-    { li:2,ni:0, lj:3,nj:0, dur:1.0, begin:0.6 },
-    { li:2,ni:1, lj:3,nj:1, dur:1.1, begin:1.9 },
-    { li:2,ni:2, lj:3,nj:0, dur:0.9, begin:0.1 },
-    { li:2,ni:3, lj:3,nj:1, dur:1.2, begin:2.6 },
-    { li:2,ni:3, lj:3,nj:2, dur:1.0, begin:0.9 },
-    { li:2,ni:4, lj:3,nj:2, dur:1.1, begin:1.4 },
-    { li:2,ni:5, lj:3,nj:1, dur:1.3, begin:3.3 },
-    { li:2,ni:4, lj:3,nj:0, dur:1.0, begin:4.4 },
-  ];
-
-  const pulses = pulseSpecs.map(p => ({
-    x1: layers[p.li].x, y1: layers[p.li].ys[p.ni],
-    x2: layers[p.lj].x, y2: layers[p.lj].ys[p.nj],
-    dur: p.dur, begin: p.begin,
-  }));
-
-  return (
-    <svg viewBox="0 0 520 400" style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 360 }} aria-hidden="true">
-      <defs>
-        <radialGradient id="netBg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stopColor="rgba(201,102,255,0.06)"/>
-          <stop offset="100%" stopColor="rgba(201,102,255,0)"/>
-        </radialGradient>
-        <filter id="nodeGlow" x="-100%" y="-100%" width="300%" height="300%">
-          <feGaussianBlur stdDeviation="5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="dotGlow" x="-200%" y="-200%" width="500%" height="500%">
-          <feGaussianBlur stdDeviation="2.5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="ringGlow" x="-100%" y="-100%" width="300%" height="300%">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      {/* Ambient background gradient */}
-      <rect width="520" height="400" fill="url(#netBg)" rx="4"/>
-
-      {/* Layer labels */}
-      {(['Input','Hidden','Hidden','Output'] as const).map((lbl, li) => (
-        <text key={li} x={layers[li].x} y={388} textAnchor="middle"
-          style={{ fontFamily:'monospace', fontSize:8, fill:'rgba(201,102,255,0.4)', letterSpacing:'0.1em' }}>
-          {lbl.toUpperCase()}
-        </text>
-      ))}
-
-      {/* Base edges */}
-      {edges.map(e => (
-        <line key={e.k} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}
-          stroke="rgba(201,102,255,0.11)" strokeWidth="0.7"/>
-      ))}
-
-      {/* Activity edges — gentle opacity flicker on dense L1→L2 section */}
-      {activityEdges.map((e, i) => (
-        <line key={`act-${i}`} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}
-          stroke="#c966ff" strokeWidth="0.7">
-          <animate attributeName="opacity"
-            values="0;0.28;0.06;0.32;0.04;0.22;0"
-            dur={`${e.dur}s`} repeatCount="indefinite" begin={`${e.begin}s`}/>
-        </line>
-      ))}
-
-      {/* Expanding rings on I/O nodes */}
-      {layers.map((layer, li) =>
-        (li === 0 || li === 3) ? layer.ys.map((y, ni) => {
-          const base = ((li * 2.1 + ni * 0.85) % 3.2).toFixed(2);
-          return [0, 1.5].map((off, ri) => (
-            <circle key={`ring-${li}-${ni}-${ri}`} cx={layer.x} cy={y}
-              r={li === 3 ? 7 : 6.5} fill="none" stroke="#c966ff" strokeWidth="0.8"
-              filter="url(#ringGlow)">
-              <animate attributeName="r"
-                values={li === 3 ? '7;26' : '6.5;24'}
-                dur="2.2s" repeatCount="indefinite" begin={`${(parseFloat(base)+off).toFixed(2)}s`}/>
-              <animate attributeName="opacity"
-                values="0.55;0" dur="2.2s" repeatCount="indefinite"
-                begin={`${(parseFloat(base)+off).toFixed(2)}s`}/>
-            </circle>
-          ));
-        }) : null
-      )}
-
-      {/* Pulse dots */}
-      {pulses.map((p, i) => (
-        <circle key={i} r={3} fill="#c966ff" filter="url(#dotGlow)">
-          <animateMotion dur={`${p.dur}s`} repeatCount="indefinite" begin={`${p.begin}s`}
-            path={`M ${p.x1},${p.y1} L ${p.x2},${p.y2}`}/>
-          <animate attributeName="opacity" values="0;1;1;0"
-            keyTimes="0;0.07;0.93;1" dur={`${p.dur}s`}
-            repeatCount="indefinite" begin={`${p.begin}s`}/>
-        </circle>
-      ))}
-
-      {/* Nodes */}
-      {layers.map((layer, li) =>
-        layer.ys.map((y, ni) => {
-          const isIO  = li === 0 || li === 3;
-          const isOut = li === 3;
-          const r     = isOut ? 7.5 : isIO ? 6.5 : 4.5;
-          const from  = isIO  ? '0.7' : '0.35';
-          const to    = '1';
-          const dur   = `${1.6 + (ni % 3) * 0.5}s`;
-          const beg   = `${((li * 2.2 + ni * 0.7) % 3.5).toFixed(2)}s`;
-          return (
-            <circle key={`n-${li}-${ni}`} cx={layer.x} cy={y} r={r}
-              fill="#c966ff" filter={isIO ? 'url(#nodeGlow)' : undefined}>
-              <animate attributeName="opacity" values={`${from};${to};${from}`}
-                dur={dur} repeatCount="indefinite" begin={beg}/>
-            </circle>
-          );
-        })
-      )}
-    </svg>
   );
 }
 
@@ -226,11 +55,11 @@ function Navbar() {
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-      background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(14px)',
+      background: 'var(--nav-bg)', backdropFilter: 'blur(14px)',
       borderBottom: 'var(--border-lg)', display: 'flex', alignItems: 'center', height: 52,
     }}>
       <div className="nav-logo">
-        <div className="nav-dot"><span/><span/><span/><span/></div>
+        <img src="/logo-navbar.png" alt="" style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
         0G-MEMORY
       </div>
       <div style={{ display: 'flex', height: '100%', overflowX: 'auto' }}>
@@ -240,10 +69,14 @@ function Navbar() {
           </a>
         ))}
       </div>
-      <div style={{ marginLeft: 'auto', paddingRight: 20, flexShrink: 0 }}>
-        <Link href="/demo" className="btn-primary" style={{ fontSize: 10 }}>
-          Try Demo
-        </Link>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', height: '100%', flexShrink: 0 }}>
+        <Link href="/pitch" className="nav-link" style={{ borderRight: 'var(--border-lg)' }}>Pitch</Link>
+        <ThemeToggle />
+        <div style={{ paddingRight: 20, paddingLeft: 16 }}>
+          <Link href="/demo" className="btn-primary" style={{ fontSize: 10 }}>
+            Try Demo
+          </Link>
+        </div>
       </div>
     </nav>
   );
@@ -299,7 +132,7 @@ function Hero() {
         </div>
 
         <div style={{ flex: 1 }}>
-          <NeuralSprite />
+          <DottedGlobe />
         </div>
 
         {/* Three attributes */}
@@ -436,7 +269,7 @@ function HowItWorks() {
       num: '02', color: P2,
       title: 'Root hash returned',
       short: '0G Storage anchors the data',
-      detail: 'The 0G Storage network confirms the upload, distributes the data across nodes, and returns a root hash. This hash is your cryptographic proof — anyone can verify the data at storagescan.0g.ai. The hash is also registered on 0G Chain via the AgentPayment contract for invoices.',
+      detail: 'The 0G Storage network confirms the upload, distributes the data across nodes, and returns a root hash. This hash is your cryptographic proof — anyone can verify the data at storagescan-galileo.0g.ai. The hash is also registered on 0G Chain via the AgentPayment contract for invoices.',
     },
     {
       num: '03', color: P3,
@@ -558,7 +391,7 @@ function SDKSection() {
 
 <span class="cm">// rootHash → permanent cryptographic proof</span>
 console.<span class="fn">log</span>(storageScanUrl);
-<span class="cm">// → https://storagescan.0g.ai/tx/0xbde826...</span>
+<span class="cm">// → https://storagescan-galileo.0g.ai/tx/0xbde826...</span>
 <span class="cm">// Verifiable forever. Cannot be modified.</span>`,
   };
 

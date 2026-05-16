@@ -4,12 +4,13 @@ import { useState } from 'react';
 interface Props {
   onGenerate: (clientName: string, jobDescription: string) => void;
   loading: boolean;
+  disabled?: boolean;
 }
 
-export default function InvoiceForm({ onGenerate, loading }: Props) {
+export default function InvoiceForm({ onGenerate, loading, disabled = false }: Props) {
   const [clientName, setClientName] = useState('');
   const [jobDescription, setJobDescription] = useState('');
-  const canSubmit = !loading && !!clientName.trim() && !!jobDescription.trim();
+  const canSubmit = !loading && !disabled && !!clientName.trim() && !!jobDescription.trim();
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

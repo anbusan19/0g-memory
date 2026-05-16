@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "pnpm --filter=0g-memory-sdk build",
     "build": "next build",
     "compile": "hardhat compile",
     "deploy:testnet": "hardhat run scripts/deploy.ts --network 0g-testnet",
@@ -14,7 +15,7 @@
     "project": "tsconfig.hardhat.json"
   },
   "dependencies": {
-    "chainmemory-sdk": "workspace:*",
+    "0g-memory-sdk": "workspace:*",
     "ethers": "^6.14.0",
     "openai": "^4.0.0",
     "uuid": "^9.0.0",

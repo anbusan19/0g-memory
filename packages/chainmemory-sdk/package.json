@@ -1,18 +1,55 @@
 {
-  "name": "chainmemory-sdk",
-  "version": "0.1.0",
-  "description": "Persistent memory layer for AI agents backed by 0G Storage",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "name": "0g-memory-sdk",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.1.2",
+  "description": "Persistent, verifiable memory for AI agents — backed by 0G Storage (KV + Log) and 0G Chain",
+  "keywords": [
+    "ai-agents",
+    "agent-memory",
+    "0g-network",
+    "decentralized-storage",
+    "web3",
+    "autonomous-agents",
+    "blockchain",
+    "llm"
+  ],
+  "license": "MIT",
+  "author": "0G-Memory Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anbusan19/0g-memory-sdk"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@0gfoundation/0g-storage-ts-sdk": "^1.2.9",
     "ethers": "6.13.1"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

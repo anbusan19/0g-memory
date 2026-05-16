@@ -1,9 +1,8 @@
-import { Indexer, MemData, Batcher, FixedPriceFlow__factory } from '@0gfoundation/0g-storage-ts-sdk';
+import { Indexer, MemData, Batcher, FixedPriceFlow__factory, KvClient } from '@0gfoundation/0g-storage-ts-sdk';
 import { ethers } from 'ethers';
 
-// 0G mainnet flow contract — used by Batcher for KV writes
-const FLOW_CONTRACT_MAINNET = '0x62D4144dB0F0a6fBBaeb6296c785C71B3D57C526';
 const FLOW_CONTRACT_TESTNET = '0x22E03a6A89B950F1c82ec5e74F8eCa321a105296';
+const FLOW_CONTRACT_MAINNET = '0x62D4144dB0F0a6fBBaeb6296c785C71B3D57C526';
 
 function getFlowAddress(rpcUrl: string): string {
   return rpcUrl.includes('testnet') ? FLOW_CONTRACT_TESTNET : FLOW_CONTRACT_MAINNET;
@@ -23,7 +22,7 @@ export class StorageLayer {
     this.flowAddress = getFlowAddress(rpcUrl);
   }
 
-  // KV write — fast, overwritable. Use for agent context and client data.
+  // KV write — fast, overwritable. Used for agent context and the key→rootHash index.
   async kvWrite(streamId: string, key: string, value: string): Promise<string> {
     const [nodes, err] = await this.indexer.selectNodes(1);
     if (err) throw new Error(`Node selection failed: ${err}`);
@@ -31,7 +30,6 @@ export class StorageLayer {
     const flow = FixedPriceFlow__factory.connect(this.flowAddress, this.signer);
     const batcher = new Batcher(1, nodes, flow, this.rpcUrl);
 
-    // streamId must be bytes32 — hash the human-readable string
     const streamIdBytes32 = ethers.keccak256(ethers.toUtf8Bytes(streamId));
     const keyBytes = Uint8Array.from(Buffer.from(key, 'utf-8'));
     const valueBytes = Uint8Array.from(Buffer.from(value, 'utf-8'));
@@ -43,7 +41,28 @@ export class StorageLayer {
     return tx.txHash;
   }
 
-  // Log write — permanent, immutable. Use for invoices and audit trail.
+  // KV read — look up a value by key from a KV stream on a storage node.
+  async kvRead(streamId: string, key: string): Promise<string | null> {
+    const [nodes, err] = await this.indexer.selectNodes(1);
+    if (err || nodes.length === 0) return null;
+
+    // StorageNode extends HttpProvider which stores .url on the instance
+    const nodeUrl = (nodes[0] as unknown as { url: string }).url;
+    const kvClient = new KvClient(nodeUrl);
+
+    const streamIdBytes32 = ethers.keccak256(ethers.toUtf8Bytes(streamId));
+    const keyHex = ethers.hexlify(Buffer.from(key, 'utf-8'));
+
+    try {
+      const value = await kvClient.getValue(streamIdBytes32, keyHex);
+      if (!value) return null;
+      return Buffer.from(value.data, 'base64').toString('utf-8');
+    } catch {
+      return null;
+    }
+  }
+
+  // Log write — permanent, immutable. Returns the content-address root hash.
   async logWrite(data: object): Promise<string> {
     const encoded = new TextEncoder().encode(JSON.stringify(data));
     const memData = new MemData(encoded);
@@ -51,35 +70,17 @@ export class StorageLayer {
     const [result, uploadErr] = await this.indexer.upload(memData, this.rpcUrl, this.signer);
     if (uploadErr) throw new Error(`Log write failed: ${uploadErr}`);
 
-    // upload returns single-file result with rootHash
-    const rootHash = (result as { rootHash: string }).rootHash;
-    return rootHash;
+    return (result as { rootHash: string }).rootHash;
   }
 
-  // Download by root hash — use to retrieve archived records
-  async retrieve(rootHash: string, outputPath: string): Promise<void> {
-    const err = await this.indexer.download(rootHash, outputPath, true);
-    if (err) throw new Error(`Retrieve failed: ${err}`);
-  }
-
-  // Retrieve a Log record directly into memory (no persistent local file)
+  // Retrieve a Log record into memory — works in both Node.js and browsers.
   async retrieveToMemory(rootHash: string): Promise<unknown> {
-    const os = await import('os');
-    const path = await import('path');
-    const fs = await import('fs/promises');
-
-    const tmpFile = path.join(os.tmpdir(), `cm-${rootHash.slice(0, 16)}.json`);
-    try {
-      const err = await this.indexer.download(rootHash, tmpFile, true);
-      if (err) throw new Error(`Retrieve failed: ${err}`);
-      const raw = await fs.readFile(tmpFile, 'utf-8');
-      return JSON.parse(raw);
-    } finally {
-      await fs.unlink(tmpFile).catch(() => {});
-    }
+    const [blob, err] = await this.indexer.downloadToBlob(rootHash);
+    if (err) throw new Error(`Retrieve failed: ${err}`);
+    return JSON.parse(await blob.text());
   }
 
   getStorageScanUrl(rootHash: string): string {
-    return `https://storagescan.0g.ai/tx/${rootHash}`;
+    return `https://storagescan-galileo.0g.ai/tx/${rootHash}`;
   }
 }

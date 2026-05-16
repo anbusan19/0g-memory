@@ -26,11 +26,16 @@ export const metadata: Metadata = {
   title: '0G-Memory — Persistent Memory for AI Agents',
   description:
     'The decentralized memory layer for autonomous AI agents, powered by 0G Storage. Verifiable, permanent, cross-session agent memory.',
+  icons: { icon: '/icon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* no-flash theme init — runs before paint */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');var p=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(t===null&&p))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
+      </head>
       <body className={`${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakarta.variable} antialiased`}>
         {children}
       </body>

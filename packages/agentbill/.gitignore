@@ -38,15 +38,3 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
-
-# Next.js generated
-next-env.d.ts
-
-# Vercel
-.vercel/
-
-# Test coverage
-coverage/
-
-# Claude Code local settings
-.claude/

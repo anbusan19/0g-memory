@@ -1,3 +1,14 @@
+export interface ChainMemoryConfig {
+  /** Unique identifier for this agent (use deriveAgentId() to create one). */
+  agentId: string;
+  /** Private key of the wallet that pays for 0G storage transactions. */
+  privateKey: string;
+  /** 0G chain JSON-RPC endpoint (e.g. https://evmrpc-testnet.0g.ai). */
+  rpcUrl: string;
+  /** 0G storage indexer endpoint (e.g. https://indexer-storage-testnet-standard.0g.ai). */
+  indexerRpc: string;
+}
+
 export interface MemoryEntry {
   agentId: string;
   key: string;
@@ -11,11 +22,4 @@ export interface ArchiveRecord {
   data: unknown;
   timestamp: number;
   rootHash?: string;
-}
-
-export interface ChainMemoryConfig {
-  agentId: string;
-  privateKey: string;
-  rpcUrl: string;
-  indexerRpc: string;
 }

@@ -1,0 +1,4 @@
+{
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm --filter=0g-memory-sdk build && cd packages/agentbill && next build"
+}

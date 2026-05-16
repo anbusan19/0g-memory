@@ -22,7 +22,10 @@
       "Bash(curl -s -X POST http://localhost:3000/api/generate -H 'Content-Type: application/json' -d '{\"clientName\":\"Acme Corp\",\"jobDescription\":\"40 hours of API development for payment integration at $150/hr\"}')",
       "Bash(python -m json.tool)",
       "Bash(curl -s -X POST http://localhost:3000/api/generate -H \"Content-Type: application/json\" -d '{\"clientName\":\"Acme Corp\",\"jobDescription\":\"40 hours of API development for payment integration at $150/hr\"}')",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\OGhack\\\\Ephemeral\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(xargs head -30)"
     ]
   }
 }
