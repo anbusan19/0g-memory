@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install *)",
+      "Bash(pnpm view *)",
+      "Bash(pnpm build *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(pnpm compile *)",
+      "Bash(node -e \"const sdk = require\\('./packages/chainmemory-sdk/dist/index.js'\\); console.log\\('Exports:', Object.keys\\(sdk\\)\\)\")",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\('Contract:', d.contractName\\); console.log\\('Functions:', d.abi.filter\\(x=>x.type==='function'\\).map\\(x=>x.name\\)\\); console.log\\('Events:', d.abi.filter\\(x=>x.type==='event'\\).map\\(x=>x.name\\)\\)\")",
+      "Bash(node *)",
+      "Bash(git check-ignore *)",
+      "Bash(pnpm *)",
+      "Bash(npx tsc *)",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(git rm *)",
+      "Bash(pnpm dev *)",
+      "Bash(echo \"Started PID $!\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/generate -H 'Content-Type: application/json' -d '{\"clientName\":\"Acme Corp\",\"jobDescription\":\"40 hours of API development for payment integration at $150/hr\"}')",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s -X POST http://localhost:3000/api/generate -H \"Content-Type: application/json\" -d '{\"clientName\":\"Acme Corp\",\"jobDescription\":\"40 hours of API development for payment integration at $150/hr\"}')",
+      "Bash(curl *)"
+    ]
+  }
+}

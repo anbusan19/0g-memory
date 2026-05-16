@@ -28,6 +28,6 @@ export async function registerInvoiceOnChain(
 
   return {
     txHash: receipt.hash,
-    chainScanUrl: `https://chainscan.0g.ai/tx/${receipt.hash}`,
+    chainScanUrl: `https://chainscan-galileo.0g.ai/tx/${receipt.hash}`,
   };
 }

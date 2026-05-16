@@ -31,9 +31,11 @@ export class StorageLayer {
     const flow = FixedPriceFlow__factory.connect(this.flowAddress, this.signer);
     const batcher = new Batcher(1, nodes, flow, this.rpcUrl);
 
+    // streamId must be bytes32 — hash the human-readable string
+    const streamIdBytes32 = ethers.keccak256(ethers.toUtf8Bytes(streamId));
     const keyBytes = Uint8Array.from(Buffer.from(key, 'utf-8'));
     const valueBytes = Uint8Array.from(Buffer.from(value, 'utf-8'));
-    batcher.streamDataBuilder.set(streamId, keyBytes, valueBytes);
+    batcher.streamDataBuilder.set(streamIdBytes32, keyBytes, valueBytes);
 
     const [tx, batchErr] = await batcher.exec();
     if (batchErr) throw new Error(`KV write failed: ${batchErr}`);
@@ -58,6 +60,23 @@ export class StorageLayer {
   async retrieve(rootHash: string, outputPath: string): Promise<void> {
     const err = await this.indexer.download(rootHash, outputPath, true);
     if (err) throw new Error(`Retrieve failed: ${err}`);
+  }
+
+  // Retrieve a Log record directly into memory (no persistent local file)
+  async retrieveToMemory(rootHash: string): Promise<unknown> {
+    const os = await import('os');
+    const path = await import('path');
+    const fs = await import('fs/promises');
+
+    const tmpFile = path.join(os.tmpdir(), `cm-${rootHash.slice(0, 16)}.json`);
+    try {
+      const err = await this.indexer.download(rootHash, tmpFile, true);
+      if (err) throw new Error(`Retrieve failed: ${err}`);
+      const raw = await fs.readFile(tmpFile, 'utf-8');
+      return JSON.parse(raw);
+    } finally {
+      await fs.unlink(tmpFile).catch(() => {});
+    }
   }
 
   getStorageScanUrl(rootHash: string): string {

@@ -13,37 +13,69 @@ export default function MemoryPanel({ clientHistory, clientName }: Props) {
   };
 
   return (
-    <div className="bg-[#001a0d] border border-[#00ff88]/30 rounded-xl p-5">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
-        <span className="text-[#00ff88] text-sm font-bold">
-          ChainMemory — Client Recalled
+    <div style={{ border: '1.5px solid var(--og-cyan)', background: 'var(--og-cyan-dim)' }}>
+
+      {/* Header */}
+      <div style={{ padding: '12px 20px', borderBottom: '1px solid rgba(34,211,238,0.18)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className="live-dot" style={{ background: 'var(--og-cyan)', animation: 'livepulse 1.2s ease-in-out infinite' }} />
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--og-cyan)' }}>
+          0G-Memory — Client Recalled
         </span>
       </div>
-      <p className="text-gray-300 text-sm mb-3">
-        Welcome back, <strong className="text-white">{clientName}</strong>.
-        Agent retrieved your history from 0G Storage.
-      </p>
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="bg-black/30 rounded p-3">
-          <div className="text-gray-400 text-xs mb-1">Total Invoiced</div>
-          <div className="text-white font-bold">
-            ${h.totalInvoiced?.toLocaleString()}
+
+      {/* Client greeting */}
+      <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(34,211,238,0.18)' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--gray-600)' }}>
+          Welcome back,{' '}
+        </span>
+        <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 18, color: 'var(--white)' }}>
+          {clientName}
+        </span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--gray-600)' }}>
+          . Agent retrieved your history from 0G Storage.
+        </span>
+      </div>
+
+      {/* Stats grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid rgba(34,211,238,0.18)' }}>
+        <div style={{ padding: '14px 20px', borderRight: '1px solid rgba(34,211,238,0.18)' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--gray-400)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Total Invoiced
+          </div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 26, color: 'var(--og-cyan)', lineHeight: 1 }}>
+            ${h.totalInvoiced?.toLocaleString() ?? '—'}
           </div>
         </div>
-        <div className="bg-black/30 rounded p-3">
-          <div className="text-gray-400 text-xs mb-1">Past Invoices</div>
-          <div className="text-white font-bold">{h.invoiceCount}</div>
-        </div>
-        <div className="bg-black/30 rounded p-3 col-span-2">
-          <div className="text-gray-400 text-xs mb-1">Last Job</div>
-          <div className="text-white">{h.lastJobDescription}</div>
-        </div>
-        <div className="bg-black/30 rounded p-3 col-span-2">
-          <div className="text-gray-400 text-xs mb-1">Last Invoice</div>
-          <div className="text-[#00ff88] font-mono">{h.lastInvoiceId}</div>
+        <div style={{ padding: '14px 20px' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--gray-400)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Past Invoices
+          </div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 26, color: 'var(--og-cyan)', lineHeight: 1 }}>
+            {h.invoiceCount ?? '—'}
+          </div>
         </div>
       </div>
+
+      {/* Last job + invoice */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <div style={{ padding: '14px 20px', borderRight: '1px solid rgba(34,211,238,0.18)' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--gray-400)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Last Job
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--white)', lineHeight: 1.6 }}>
+            {h.lastJobDescription ?? '—'}
+          </div>
+        </div>
+        <div style={{ padding: '14px 20px' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--gray-400)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Last Invoice ID
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--og-cyan)', wordBreak: 'break-all' }}>
+            {h.lastInvoiceId ?? '—'}
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

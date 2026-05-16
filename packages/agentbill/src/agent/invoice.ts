@@ -57,9 +57,11 @@ Generate a detailed, professional invoice. Output ONLY valid JSON matching this 
 Be realistic with rates. Tax = 10% of subtotal. No markdown, no explanation — JSON only.`;
 
   const completion = await client.chat.completions.create({
-    model: 'meta-llama/Llama-3.3-70B-Instruct',
+    model: 'qwen/qwen-2.5-7b-instruct',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.3,
+    // @ts-ignore — 0G-specific TEE verification param
+    verify_tee: true,
   });
 
   const raw = completion.choices[0].message.content!.trim();

@@ -9,7 +9,7 @@ async function main() {
 
   const address = await contract.getAddress();
   console.log(`✅ AgentPayment deployed to: ${address}`);
-  console.log(`🔍 ChainScan: https://chainscan.0g.ai/address/${address}`);
+  console.log(`🔍 ChainScan: https://chainscan-galileo.0g.ai/address/${address}`);
   console.log(`\nAdd to .env:\nNEXT_PUBLIC_PAYMENT_CONTRACT_ADDRESS=${address}`);
 }
 

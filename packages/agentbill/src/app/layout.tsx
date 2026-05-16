@@ -1,15 +1,37 @@
 import type { Metadata } from 'next';
+import { Instrument_Serif, JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
+const instrumentSerif = Instrument_Serif({
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  title: 'AgentBill — Autonomous Invoice Agent',
-  description: 'Persistent decentralized memory for AI agents, powered by 0G Storage. Generate invoices with 0G Compute, settle payments on 0G Chain.',
+  title: '0G-Memory — Persistent Memory for AI Agents',
+  description:
+    'The decentralized memory layer for autonomous AI agents, powered by 0G Storage. Verifiable, permanent, cross-session agent memory.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-[#0a0a0a] text-white font-mono antialiased">
+      <body className={`${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakarta.variable} antialiased`}>
         {children}
       </body>
     </html>
