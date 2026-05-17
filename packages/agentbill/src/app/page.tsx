@@ -448,10 +448,32 @@ console.<span class="fn">log</span>(storageScanUrl);
 
           <div style={{ marginTop: 20 }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gray-400)', marginBottom: 8 }}>
+              Install
+            </div>
+            <div className="code-block" style={{ marginBottom: 12 }}>
+              <pre style={{ whiteSpace: 'pre-wrap' }}>npm install 0g-memory-sdk</pre>
+            </div>
+            <a
+              href="https://www.npmjs.com/package/0g-memory-sdk"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                fontFamily: 'var(--font-mono)', fontSize: 9,
+                color: 'var(--og-green)', letterSpacing: '0.08em',
+                textDecoration: 'none', marginBottom: 16,
+              }}
+            >
+              <span style={{ opacity: 0.6 }}>↗</span> npmjs.com/package/0g-memory-sdk
+            </a>
+          </div>
+
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gray-400)', marginBottom: 8 }}>
               Initialization
             </div>
             <div className="code-block">
-              <pre dangerouslySetInnerHTML={{ __html: `<span class="kw">import</span> { <span class="cls">ChainMemory</span> } <span class="kw">from</span> <span class="str">'chainmemory-sdk'</span>;
+              <pre dangerouslySetInnerHTML={{ __html: `<span class="kw">import</span> { <span class="cls">ChainMemory</span> } <span class="kw">from</span> <span class="str">'0g-memory-sdk'</span>;
 
 <span class="kw">const</span> memory = <span class="kw">new</span> <span class="cls">ChainMemory</span>({
   agentId:    <span class="str">'my-agent-v1'</span>,
@@ -544,6 +566,7 @@ function Footer() {
         <Link href="/demo" className="footer-link">AgentBill Demo</Link>
         <a href="#architecture" className="footer-link">Architecture</a>
         <a href="#sdk" className="footer-link">SDK</a>
+        <a href="https://www.npmjs.com/package/0g-memory-sdk" target="_blank" rel="noopener noreferrer" className="footer-link">npm</a>
       </div>
     </footer>
   );

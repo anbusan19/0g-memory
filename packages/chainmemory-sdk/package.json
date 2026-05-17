@@ -19,7 +19,8 @@
   "author": "0G-Memory Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anbusan19/0g-memory-sdk"
+    "url": "https://github.com/anbusan19/0g-memory.git",
+    "directory": "packages/chainmemory-sdk"
   },
   "files": [
     "dist",
